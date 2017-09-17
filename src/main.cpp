@@ -91,6 +91,8 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
+          double delta = j[1]["steering_angle"];
+          double a = j[1]["throttle"];
 
           // transform waypoints to car coords
           Eigen::VectorXd waypoints_x(ptsx.size());
@@ -107,13 +109,21 @@ int main() {
           double cte = polyeval(coeffs, 0);  // px = 0, py = 0 in car's coords
           double epsi = -atan(coeffs[1]);  //
 
-          // Create a vector for the state [x, y, psi, v]
+          // latency using motion model
+          const double latency = 0.1;
+          const double Lf = 2.67;
+          double x = v * cos(psi) * latency;
+          psi = - v / Lf * delta * latency;
+          v += a * latency;
+
+          // Create a vector for the state [x, y, psi, v, cte, epsi]
           Eigen::VectorXd  state(6);
-          state << 0, 0, 0, v, cte, epsi;
+          state << x, 0, psi, v, cte, epsi;
+          
+          auto vars = mpc.Solve(state, coeffs);
           
           double steer_value;
           double throttle_value;
-          auto vars = mpc.Solve(state, coeffs);
           steer_value = - vars[0];
           throttle_value = vars[1];
 
