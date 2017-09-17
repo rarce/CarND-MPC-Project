@@ -3,6 +3,33 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Report Write-up
+
+### The Model
+
+The model used in this project is the kinematic model, this include the vehicle position `x` & `y`, the orientation `psi`, the velocity `v` and the cross-track error `cte` and psi error `epsi`. The outputs are the acceleration `a` and steering angle `delta`. 
+
+```
+x_t+1 = x_t + v_t * cos(psi_t) * dt
+y_t+1 = y_t + v_t * sin(psi_t) * dt
+psi_t+1 = psi_t + v_t * delta_t / Lf * dt
+v_t+1 = v_t + a_t * dt
+cte_t = f(x_t) - y_t + (v_t * sin(epsi_t) * dt)
+epsi_t = (psi_t - psides_t) + (v_t * delta_t / Lf * dt)
+```
+
+### Timestep Length and Elapsed Duration (N & dt)
+
+I tested the lectures N=25 and dt=0.05 but didn't work, so I increment dt until the latency and play with N until get god results.
+
+### Polynomial Fitting and MPC Preprocessing
+
+The original waypoints are transformed to the car coodinate system, this simplify the following math.
+
+### Model Predictive Control with Latency
+
+To deal with the latency, we apply de motion model to proyect the position at the time after the latency period in this way we can plan a more accurate path.
+
 ## Dependencies
 
 * cmake >= 3.5
