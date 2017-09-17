@@ -5,11 +5,11 @@
 
 using CppAD::AD;
 
-// We set the number of timesteps to 25
+// We set the number of timesteps to 10
 // and the timestep evaluation frequency or evaluation
-// period to 0.05.
-size_t N = 25;
-double dt = 0.05;
+// period to .1.
+size_t N = 10;
+double dt = 0.1;
 
 // The solver takes all the state variables and actuator
 // variables in a singular vector. Thus, we should to establish
@@ -154,8 +154,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   double cte = state[4];
   double epsi = state[5];
 
-  // number of timesteps
-  size_t N = 25;
   // number of independent variables
   size_t n_vars = state.size()*N + 2*(N-1);
   // number of constraints
