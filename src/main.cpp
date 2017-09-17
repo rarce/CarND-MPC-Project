@@ -98,8 +98,8 @@ int main() {
           for (int i = 0; i < ptsx.size(); i++) {
             double x = ptsx[i] - px;
             double y = ptsy[i] - py;
-            waypoints_x(i) = x * cos(-psi) - y * sin(-psi);
-            waypoints_y(i) = x * sin(-psi) + y * cos(-psi);
+            waypoints_x(i) = x * cos(psi) + y * sin(psi);
+            waypoints_y(i) = y * cos(psi) - x * sin(psi);
           }
 
           // Polyfit
@@ -114,7 +114,7 @@ int main() {
           double steer_value;
           double throttle_value;
           auto vars = mpc.Solve(state, coeffs);
-          steer_value = vars[0];
+          steer_value = - vars[0];
           throttle_value = vars[1];
 
           json msgJson;
