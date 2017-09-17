@@ -62,13 +62,13 @@ public:
 
    // Minimize the use of actuators.
    for (int t = 0; t < N - 1; t++) {
-     fg[0] += CppAD::pow(vars[delta_start + t], 2);
-     fg[0] += CppAD::pow(vars[a_start + t], 2);
+    fg[0] += 500*CppAD::pow(vars[delta_start + t], 2); // increase smoothness driving (smoothness steering)
+    fg[0] += CppAD::pow(vars[a_start + t], 2);
    }
 
    // Minimize the value gap between sequential actuations.
    for (int t = 0; t < N - 2; t++) {
-     fg[0] += CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+     fg[0] += 200*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
      fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
    }
 
